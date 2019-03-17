@@ -3,58 +3,74 @@ module.exports = function check(str, bracketsConfig) {
 
   let stack = [];
   let balance = true;
+  let curr;
   let prev;
 
-  function pairedBraketsSame(bracket, pair) {
-    if (
-      bracketsConfig[pair][0] === bracket &&
-      bracketsConfig[pair][1] === bracket
-    ) {
+  function opnClsBracketsSame(curr, pair) {
+    if (bracketsConfig[pair][0] === curr && bracketsConfig[pair][1] === curr) {
       return true;
     }
+  }
+
+  function rowsRatio(a, b) {
+    return a.length / b.length;
   }
 
   function stackLast() {
     return stack[stack.length - 1];
   }
 
-  function foo(bracket) {
+  for (let i = 0; i < str.length; i++) {
+    curr = str[i];
+
     for (let j = 0; j < bracketsConfig.length; j++) {
-      if (pairedBraketsSame(bracket, j)) {
-        if (stackLast() === bracket) {
+      if (opnClsBracketsSame(curr, j)) {
+        if (stackLast() === curr) {
           stack.pop();
 
           break;
         }
 
-        if (stackLast() !== bracket) {
+        if (stackLast() !== curr) {
           stack.push(bracketsConfig[j][1]);
+
+          if (rowsRatio(str, stack) < 2) {
+            balance = false;
+          }
 
           break;
         }
       }
 
-      if (bracketsConfig[j][0] === bracket) {
+      if (bracketsConfig[j][0] === curr) {
         stack.push(bracketsConfig[j][1]);
+
+        if (rowsRatio(str, stack) < 2) {
+          balance = false;
+        }
 
         break;
       }
 
-      if (bracketsConfig[j][1] === bracket) {
+      if (bracketsConfig[j][1] === curr) {
         prev = stack.pop();
 
-        if (prev !== bracketsConfig[j][1]) balance = false;
+        if (bracketsConfig[j][1] !== prev) {
+          balance = false;
+        }
 
         break;
       }
     }
+
+    if (!balance) {
+      return balance;
+    }
   }
 
-  for (let i = 0; i < str.length; i++) {
-    foo(str[i]);
+  if (stack.length !== 0) {
+    balance = false;
   }
-
-  if (stack.length !== 0) balance = false;
 
   return balance;
 };
