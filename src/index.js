@@ -3,8 +3,6 @@ module.exports = function check(str, bracketsConfig) {
 
   let stack = [];
   let balance = true;
-  let curr;
-  let prev;
 
   function opnClsBracketsSame(curr, pair) {
     if (bracketsConfig[pair][0] === curr && bracketsConfig[pair][1] === curr) {
@@ -21,7 +19,7 @@ module.exports = function check(str, bracketsConfig) {
   }
 
   for (let i = 0; i < str.length; i++) {
-    curr = str[i];
+    const curr = str[i];
 
     for (let j = 0; j < bracketsConfig.length; j++) {
       if (opnClsBracketsSame(curr, j)) {
@@ -53,7 +51,7 @@ module.exports = function check(str, bracketsConfig) {
       }
 
       if (bracketsConfig[j][1] === curr) {
-        prev = stack.pop();
+        const prev = stack.pop();
 
         if (bracketsConfig[j][1] !== prev) {
           balance = false;
