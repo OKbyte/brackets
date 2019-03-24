@@ -1,7 +1,7 @@
 module.exports = function check(str, bracketsConfig) {
   "use strict";
 
-  let stack = [];
+  const stack = [];
   let balance = true;
 
   function opnClsBracketsSame(curr, pair) {
